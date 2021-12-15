@@ -1,0 +1,39 @@
+>>>>>>>>>>>>>>>>>  NO GPU darknet
+# darknet install
+
+cp -r darknet/ ./darknet_nogpu
+cd ~/darknet_nogpu/build_release
+rm -r *
+
+vi Makefile
+
+GPU=0
+CUDNN=0
+CUDNN_HALF=0
+OPENCV=0
+AVX=1
+OPENMP=1
+
+
+===========CMakeLists.txt===================
+option(CMAKE_VERBOSE_MAKEFILE "Create verbose makefile" ON)
+option(CUDA_VERBOSE_BUILD "Create verbose CUDA build" OFF)
+option(BUILD_SHARED_LIBS "Create dark as a shared library" ON)
+option(BUILD_AS_CPP "Build Darknet using C++ compiler also for C files" OFF)
+option(BUILD_USELIB_TRACK "Build uselib_track" ON)
+option(MANUALLY_EXPORT_TRACK_OPTFLOW "Manually export the TRACK_OPTFLOW=1 define" OFF)
+option(ENABLE_OPENCV "Enable OpenCV integration" ON)
+option(ENABLE_CUDA "Enable CUDA support" OFF)
+option(ENABLE_CUDNN "Enable CUDNN" OFF)
+option(ENABLE_CUDNN_HALF "Enable CUDNN Half precision" OFF)
+option(ENABLE_ZED_CAMERA "Enable ZED Camera support" ON)
+option(ENABLE_VCPKG_INTEGRATION "Enable VCPKG integration" ON)
+option(ENABLE_CSHARP_WRAPPER "Enable building a csharp wrapper" OFF)
+option(VCPKG_BUILD_OPENCV_WITH_CUDA "Build OpenCV with CUDA extension integration" ON)
+option(VCPKG_USE_OPENCV2 "Use legacy OpenCV 2" OFF)
+option(VCPKG_USE_OPENCV3 "Use legacy OpenCV 3" OFF)
+option(VCPKG_USE_OPENCV4 "Use OpenCV 4" ON)
+
+
+cmake ..
+cmake --build . --target install --parallel 8
