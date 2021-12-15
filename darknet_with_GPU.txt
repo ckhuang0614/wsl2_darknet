@@ -1,3 +1,86 @@
+############################Win10 21H2############################
+1. Install Nvidia Driver 
+   510.06_gameready_win11_win10-dch_64bit_international.exe
+2. Install VS2019
+3. Install CUDA11.4
+   cuda_11.4.3_472.50_win10.exe (uncheck driver_472)
+
+4. Powershell (admin)
+
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+5. reboot win10
+
+6. Powershell (admin)
+wsl.exe --update
+
+wsl --set-default-version 2
+
+7. Powershell 
+
+wsl install Ubuntu-18.04
+
+# https://docs.nvidia.com/cuda/wsl-user-guide/index.html
+# Running Existing GPU Accelerated Containers on WSL 2
+
+curl https://get.docker.com | sh       
+
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+
+sudo apt-get update
+
+sudo apt-get install -y nvidia-docker2      
+
+sudo service docker stop
+
+sudo service docker start
+
+docker run --gpus all nvcr.io/nvidia/k8s/cuda-sample:nbody nbody -gpu -benchmark
+
+# Building Your Own GPU-accelerated Application on WSL 2
+
+cp /mnt/d/Install_Packages/NV_Driver/cuda-repo-wsl-ubuntu-11-4-local_11.4.0-1_amd64.deb  ./
+
+sudo dpkg -i cuda-repo-wsl-ubuntu-11-4-local_11.4.0-1_amd64.deb
+sudo apt-key add /var/cuda-repo-wsl-ubuntu-11-4-local/7fa2af80.pub
+sudo apt-get update
+sudo apt-get -y install cuda
+cd /usr/local/cuda-11.4/samples/4_Finance/BlackScholes
+sudo make BlackScholes
+./BlackScholes
+
+
+8. Powershell  (admin)
+
+wsl -l -v
+wsl -t Ubuntu-18.04
+
+# https://blog.miniasp.com/post/2020/07/26/Multiple-Linux-Dev-Environment-build-on-WSL-2
+
+cd $env:USERPROFILE
+wsl --export Ubuntu-18.04  Ubuntu-18.04.tar
+wsl --import Ubuntu-1804-darknet    .\Ubuntu-1804-darknet    Ubuntu-18.04.tar --version 2
+wsl --import Ubuntu-1804-triton    .\Ubuntu-1804-triton    Ubuntu-18.04.tar --version 2
+
+[2021-11-29] deprecated
+############################[remark]############################
+# https://github.com/microsoft/WSL/issues/5548#issuecomment-912495487
+Open cmd as Administrator and cd into C:\Windows\System32\lxss\lib
+Delete libcuda.so and libcuda.so.1 (You can also do this in Windows Explorer as well)
+Run wsl -e /bin/bash in cmd and you should already in /mnt/c/Windows/System32/lxss/lib, now you have permission to create symlink:
+    ln -s libcuda.so.1.1 libcuda.so.1
+    ln -s libcuda.so.1.1 libcuda.so
+############################[remark]############################
+
+
+wsl -d Ubuntu-1804-darknet --user nvidia
+wsl -t Ubuntu-1804-darknet
+
 
 # darknet install
 
