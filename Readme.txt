@@ -132,8 +132,39 @@ CMakeFiles/dark.dir/build.make:1058: recipe for target 'CMakeFiles/dark.dir/src/
 
 >>>>>>>>>>>>>>>>>  關關難過-----關關過-----
 
-
 https://stackoverflow.com/questions/58445944/segmentation-fault-when-compiling-darknet-for-gpu
 https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#post-installation-actions
 
+export PATH=/usr/local/cuda-11.4/bin${PATH:+:${PATH}} >> ~/.bashrc
+
+再次確認 Makefile
+# GeForce RTX 3070, 3080, 3090
+ARCH= -gencode arch=compute_86,code=[sm_86,compute_86]
+
+cd ~/darknet/build_release
+rm -r *
+
+cmake ..
+cmake --build . --target install --parallel 8
+
+make[1]: Entering directory '/home/nvidia/darknet/build_release'
+make[1]: Nothing to be done for 'preinstall'.
+make[1]: Leaving directory '/home/nvidia/darknet/build_release'
+Install the project...
+/usr/bin/cmake -P cmake_install.cmake
+-- Install configuration: "Release"
+-- Installing: /home/nvidia/darknet/libdarknet.so
+-- Set runtime path of "/home/nvidia/darknet/libdarknet.so" to ""
+-- Installing: /home/nvidia/darknet/include/darknet/darknet.h
+-- Installing: /home/nvidia/darknet/include/darknet/yolo_v2_class.hpp
+-- Installing: /home/nvidia/darknet/uselib
+-- Set runtime path of "/home/nvidia/darknet/uselib" to ""
+-- Installing: /home/nvidia/darknet/darknet
+-- Set runtime path of "/home/nvidia/darknet/darknet" to ""
+-- Installing: /home/nvidia/darknet/share/darknet/DarknetTargets.cmake
+-- Installing: /home/nvidia/darknet/share/darknet/DarknetTargets-release.cmake
+-- Installing: /home/nvidia/darknet/share/darknet/DarknetConfig.cmake
+-- Installing: /home/nvidia/darknet/share/darknet/DarknetConfigVersion.cmake
+
+>>>>>>>>>>>>>>>>>  成功 ^^
 
